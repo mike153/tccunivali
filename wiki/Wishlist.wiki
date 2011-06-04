@@ -2,17 +2,10 @@
 
 = Wishlist firmware =
 
-* Quando receber o ID do end-device reportar via serial o mesmo.
-* Usar o LongAdress para o envio dos comandos
-* Comando para listar o estado atual de cada dispositivo
+ * Quando receber o ID do end-device reportar via serial o mesmo.<BR>
+ * Usar o LongAdress para o envio dos comandos <BR>
+ * Comando para listar o estado atual de cada dispositivo <BR>
 
 = Wishlist Interface =
 
-* Usar o LongAddress para indexar os dispositivos
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+ * Usar o LongAddress para indexar os dispositivos
