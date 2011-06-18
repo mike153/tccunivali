@@ -91,7 +91,6 @@ ROM unsigned char myManufacturerString[]="Company ABC";
 #define MRF24J40PAOutputAdjust(a) {PHYSetLongRAMAddr(RFCTRL3,(a<<3));}
 
 unsigned short carga_dispositivo = 0;
-int flag = 0;
 
 /********************** GLOBALS ****************************************/
 unsigned short carga_disp(int valor)
@@ -110,7 +109,6 @@ void liga()
 	CloseTimer1();
 	carga_dispositivo = 0;
 	PORTBbits.RB3 = 1;
-	flag = 0;
 }
 
 void desliga()
@@ -119,7 +117,6 @@ void desliga()
 	CloseTimer1();
 	carga_dispositivo = 0;
 	PORTBbits.RB3 = 0;
-	flag = 0;
 }
 
 /********************** FUNCTION (&)PROTOTYPES *************************/
@@ -158,7 +155,7 @@ void Envio_ID (void)
 		WriteData ('>');
 		tempShortAddress.Val = 0x0000; // shjort address do pan coord.
 		SendReportByShortAddress(myPANID, tempShortAddress, FALSE);
-	//	ConsolePutROMString((ROM char*)"envio short addr pro pan coord...\r\n");
+		ConsolePutROMString((ROM char*)"envio short addr pro pan coord...\r\n");
 		Flag_Envio_ID =  1;
 
 	}
@@ -176,7 +173,7 @@ void trata_int_e_timer()
     {
 	    INTCON3bits.INT1IF = 0;
 	    
-	   //carga_dispositivo = 50000;
+	  // carga_dispositivo = 37000;
 	    if (carga_dispositivo > 0) 
 	    {
 		    if (T1CONbits.TMR1ON == 0) {
@@ -184,7 +181,6 @@ void trata_int_e_timer()
 		    	PIE1bits.TMR1IE = 1;
 		    }	
         	WriteTimer1(carga_dispositivo);
-        	flag = 1;
      	}   
     }
         
@@ -192,7 +188,6 @@ void trata_int_e_timer()
     {
 	    PIR1bits.TMR1IF = 0;
 		//CloseTimer1();
-		flag = 0;
         PORTBbits.RB3 = 1;
         Delay10TCYx(30);
         PORTBbits.RB3 = 0;        
@@ -255,10 +250,9 @@ int pega_cmd() {
 						INTCON3bits.INT1IE = 1;
 						T1CONbits.TMR1ON = 1;
 						PIE1bits.TMR1IE = 1;
-						flag = 0;
 					
 					}
-	//				ConsolePutROMString((ROM char*)"Ajustou\r\n");
+					ConsolePutROMString((ROM char*)"Ajustou\r\n");
 					TxPayLoad();
 					WriteData(USER_REPORT_TYPE);
 					WriteData(0x88); //TODO: Definir comando
@@ -300,7 +294,7 @@ void main(void)
 
 	ConsoleInit();  
 	BoardInit(); 
-//	ConsolePutROMString((ROM char*)"DEBUG> [sub Main] BoardInit OK ...\n\r ");
+	ConsolePutROMString((ROM char*)"DEBUG> [sub Main] BoardInit OK ...\n\r ");
 	MiWiInit();
   
 	while(1)
@@ -323,47 +317,21 @@ void main(void)
 
 				for (i = 0; i < 8; i++) {
 					tempLongAddress[i] = Le_E2Prom (i);
-				//	PrintChar ( tempLongAddress[i] );
+					PrintChar ( tempLongAddress[i] );
 				}
-				
-
-				//SendReportByLongAddress(tempLongAddress);
-				//ConsolePutROMString((ROM char*)"Send Report by Long Address\r\n");
-				
-			//}
-			//************ pressionou bot�o 1 *********************                              
-			if(PUSH_BUTTON_1 == 0)            
-			{
-				if(PUSH_BUTTON_1_pressed == FALSE)
-				{
-					PUSH_BUTTON_1_pressed = TRUE;                    
-					Flag_Envio_ID = 0;
-	//				ConsolePutROMString((ROM char*)"REENVIO do short addr pro pan coord...\r\n");
-				}
-				PUSH_BUTTON_1_press_time = TickGet();
-			}	
-			else
-			{
-				TICK t = TickGet();    
-				tickDifference.Val = TickGetDiff(t,PUSH_BUTTON_1_press_time);
-				if(tickDifference.Val > DEBOUNCE_TIME)
-				{
-					PUSH_BUTTON_1_pressed = FALSE;
-				}
-			}
 
 #if defined(I_AM_RFD)
 
 
 			if(CheckForDataComplete()) {
 				MRF24J40Sleep();
-		//		while( !ConsoleIsPutReady() );
+				while( !ConsoleIsPutReady() );
 
 				WDTCONbits.SWDTEN = 1;      //enable the WDT to wake me up
 				INTCONbits.RBIF = 0;
 				INTCONbits.RBIE = 1;
 
-				Sleep();            //goto sleep
+		//		Sleep();            //goto sleep
 
 				INTCONbits.RBIE = 0;
 				WDTCONbits.SWDTEN = 0;      //disable WDT
