@@ -101,6 +101,14 @@ void send_nodes_list(void)
 		if((networkStatus[i].bits.isValid) && (networkTable[i].ShortAddress.Val != 0x0000)) {
 			PrintChar(networkTable[i].ShortAddress.v[1]);
 			PrintChar(networkTable[i].ShortAddress.v[0]);
+			PrintChar(networkTable[i]).info.LongAddress[7];
+			PrintChar(networkTable[i]).info.LongAddress[6];
+			PrintChar(networkTable[i]).info.LongAddress[5];
+			PrintChar(networkTable[i]).info.LongAddress[4];
+			PrintChar(networkTable[i]).info.LongAddress[3];
+			PrintChar(networkTable[i]).info.LongAddress[2];
+			PrintChar(networkTable[i]).info.LongAddress[1];
+			PrintChar(networkTable[i]).info.LongAddress[0];
 			printf("\r\n");
 			//PrintChar (myShortAddress.v[1]);
 			//PrintChar (myShortAddress.v[0]);
@@ -110,32 +118,35 @@ void send_nodes_list(void)
 }
 
 
-void turn_on(BYTE node)
+void turn_on(BYTE *node)
 {
 	TxPayLoad();
 	
 	WriteData(USER_REPORT_TYPE);
 	WriteData(0x87); //TODO: Definir comando
-	SendReportByHandle(atoi(node), FALSE);
+	SendReportByLongAddress(node);
+	//SendReportByHandle(atoi(node), FALSE);
 }
 
-void turn_off(BYTE node)
+void turn_off(BYTE *node)
 {
 	TxPayLoad();
 	WriteData(USER_REPORT_TYPE);
 	WriteData(0x86); //TODO: Definir comando
-	SendReportByHandle(atoi(node), FALSE);
+	SendReportByLongAddress(node);
+	//SendReportByHandle(atoi(node), FALSE);
 	
 }
 
-void dimmer_node(BYTE node, WORD_VAL value)
+void dimmer_node(BYTE *node, WORD_VAL value)
 {
 	TxPayLoad();
 	WriteData(USER_REPORT_TYPE);
 	WriteData(0x88); //TODO: Definir comando
 	WriteData(value.v[0]);
 	WriteData(value.v[1]);
-	SendReportByHandle(atoi(node), FALSE);
+	SendReportByLongAddress(node);
+	//SendReportByHandle(atoi(node), FALSE);
 }
 
 void get_rs232_cmd() 
@@ -147,7 +158,7 @@ void get_rs232_cmd()
 	buff[0] = 0;	
 	p = buff;
 
-	ConsoleGetString(&buff, 4);
+	ConsoleGetString(&buff, 10);
 	
 	switch(*p++) 
 	{
