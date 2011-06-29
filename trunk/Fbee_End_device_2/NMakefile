@@ -1,0 +1,34 @@
+# MPLAB IDE generated this makefile for use with Microsoft `nmake'.
+# Project: MiWi - End Device - PIC18 - C18.mcp
+# Date: Tue May 03 20:11:12 2011
+
+AS = MPASMWIN.exe
+CC = mcc18.exe
+LD = mplink.exe
+AR = mplib.exe
+RM = del
+
+"MiWi - End Device - PIC18 - C18.cof" : "Objects - MiWi - End Device - PIC18 - C18\Console.o" "Objects - MiWi - End Device - PIC18 - C18\MSPI.o" "Objects - MiWi - End Device - PIC18 - C18\SymbolTime.o" "Objects - MiWi - End Device - PIC18 - C18\MiWi.o" "Objects - MiWi - End Device - PIC18 - C18\ConfigFuses.o" "Objects - MiWi - End Device - PIC18 - C18\main.o"
+	$(LD) /l"C:\MCC18\lib" "..\..\MCC18\lkr\18f4520i.lkr" "Objects - MiWi - End Device - PIC18 - C18\Console.o" "Objects - MiWi - End Device - PIC18 - C18\MSPI.o" "Objects - MiWi - End Device - PIC18 - C18\SymbolTime.o" "Objects - MiWi - End Device - PIC18 - C18\MiWi.o" "Objects - MiWi - End Device - PIC18 - C18\ConfigFuses.o" "Objects - MiWi - End Device - PIC18 - C18\main.o" /u_CRUNTIME /u_DEBUG /z__MPLAB_BUILD=1 /z__MPLAB_DEBUG=1 /m"MiWi - End Device - PIC18 - C18.map" /w /o"MiWi - End Device - PIC18 - C18.cof"
+
+"Objects - MiWi - End Device - PIC18 - C18\Console.o" : "..\Microchip\Common\Console.c" "..\..\MCC18\h\stdio.h" "..\..\MCC18\h\stdlib.h" "..\..\MCC18\h\string.h" "..\Microchip\Include\Common\Console.h" "..\Microchip\Common\Console.c" "..\Microchip\Include\GenericTypeDefs.h" "..\Microchip\Include\Compiler.h" "..\..\MCC18\h\p18cxxx.h" "..\..\MCC18\h\p18f4520.h" "HardwareProfile.h" "..\..\MCC18\h\stdarg.h" "..\..\MCC18\h\stddef.h" "SystemProfile.h" "MiWiDefs.h"
+	$(CC) -p=18F4520 /i"C:\Pic Cube MiWi\Microchip\MiWi" -I"C:\Pic Cube MiWi\Microchip\Include\Common" -I"C:\Pic Cube MiWi\Microchip\Common" -I"C:\Pic Cube MiWi\Microchip\Include" -I"." "C:\Pic Cube MiWi\Microchip\Common\Console.c" -fo="Objects - MiWi - End Device - PIC18 - C18\Console.o" -D__DEBUG
+
+"Objects - MiWi - End Device - PIC18 - C18\MSPI.o" : "..\Microchip\MiWi\MSPI.c" "..\..\MCC18\h\stdio.h" "..\..\MCC18\h\stdlib.h" "..\..\MCC18\h\string.h" "..\Microchip\MiWi\MSPI.c" "..\Microchip\Include\Compiler.h" "..\..\MCC18\h\p18cxxx.h" "..\..\MCC18\h\p18f4520.h" "HardwareProfile.h" "..\..\MCC18\h\stdarg.h" "..\..\MCC18\h\stddef.h" "..\Microchip\Include\GenericTypeDefs.h"
+	$(CC) -p=18F4520 /i"C:\Pic Cube MiWi\Microchip\MiWi" -I"C:\Pic Cube MiWi\Microchip\Include\Common" -I"C:\Pic Cube MiWi\Microchip\Common" -I"C:\Pic Cube MiWi\Microchip\Include" -I"." "C:\Pic Cube MiWi\Microchip\MiWi\MSPI.c" -fo="Objects - MiWi - End Device - PIC18 - C18\MSPI.o" -D__DEBUG
+
+"Objects - MiWi - End Device - PIC18 - C18\SymbolTime.o" : "..\Microchip\MiWi\SymbolTime.c" "..\..\MCC18\h\stdio.h" "..\..\MCC18\h\stdlib.h" "..\..\MCC18\h\string.h" "..\Microchip\MiWi\SymbolTime.c" "SystemProfile.h" "MiWiDefs.h" "..\Microchip\Include\MiWi\SymbolTime.h" "..\Microchip\Include\Compiler.h" "..\..\MCC18\h\p18cxxx.h" "..\..\MCC18\h\p18f4520.h" "HardwareProfile.h" "..\..\MCC18\h\stdarg.h" "..\..\MCC18\h\stddef.h" "..\Microchip\Include\GenericTypeDefs.h"
+	$(CC) -p=18F4520 /i"C:\Pic Cube MiWi\Microchip\MiWi" -I"C:\Pic Cube MiWi\Microchip\Include\Common" -I"C:\Pic Cube MiWi\Microchip\Common" -I"C:\Pic Cube MiWi\Microchip\Include" -I"." "C:\Pic Cube MiWi\Microchip\MiWi\SymbolTime.c" -fo="Objects - MiWi - End Device - PIC18 - C18\SymbolTime.o" -D__DEBUG
+
+"Objects - MiWi - End Device - PIC18 - C18\MiWi.o" : "..\Microchip\MiWi\MiWi.c" "..\..\MCC18\h\stdio.h" "..\..\MCC18\h\stdlib.h" "..\..\MCC18\h\string.h" "..\Microchip\Include\MiWi\MSPI.h" "..\Microchip\Include\MiWi\MiWi.h" "..\Microchip\Include\Common\Console.h" "..\Microchip\MiWi\MiWi.c" "..\Microchip\Include\Compiler.h" "..\..\MCC18\h\p18cxxx.h" "..\..\MCC18\h\p18f4520.h" "HardwareProfile.h" "..\..\MCC18\h\stdarg.h" "..\..\MCC18\h\stddef.h" "..\Microchip\Include\GenericTypeDefs.h" "MiWiDefs.h" "..\Microchip\Include\MiWi\SymbolTime.h" "..\Microchip\Include\MiWi\MRF24J40.h" "SystemProfile.h"
+	$(CC) -p=18F4520 /i"C:\Pic Cube MiWi\Microchip\MiWi" -I"C:\Pic Cube MiWi\Microchip\Include\Common" -I"C:\Pic Cube MiWi\Microchip\Common" -I"C:\Pic Cube MiWi\Microchip\Include" -I"." "C:\Pic Cube MiWi\Microchip\MiWi\MiWi.c" -fo="Objects - MiWi - End Device - PIC18 - C18\MiWi.o" -D__DEBUG
+
+"Objects - MiWi - End Device - PIC18 - C18\ConfigFuses.o" : "ConfigFuses.c" "..\..\MCC18\h\stdio.h" "..\..\MCC18\h\stdlib.h" "..\..\MCC18\h\string.h" "ConfigFuses.c" "..\Microchip\Include\Compiler.h" "..\..\MCC18\h\p18cxxx.h" "..\..\MCC18\h\p18f4520.h" "HardwareProfile.h" "..\..\MCC18\h\stdarg.h" "..\..\MCC18\h\stddef.h"
+	$(CC) -p=18F4520 /i"C:\Pic Cube MiWi\Microchip\MiWi" -I"C:\Pic Cube MiWi\Microchip\Include\Common" -I"C:\Pic Cube MiWi\Microchip\Common" -I"C:\Pic Cube MiWi\Microchip\Include" -I"." "ConfigFuses.c" -fo="Objects - MiWi - End Device - PIC18 - C18\ConfigFuses.o" -D__DEBUG
+
+"Objects - MiWi - End Device - PIC18 - C18\main.o" : "main.c" "..\..\MCC18\h\stdio.h" "..\..\MCC18\h\stdlib.h" "..\..\MCC18\h\string.h" "..\Microchip\Include\Common\Console.h" "..\Microchip\Include\MiWi\MiWi.h" "..\..\MCC18\h\usart.h" "..\..\MCC18\h\adc.h" "..\..\MCC18\h\delays.h" "..\..\MCC18\h\math.h" "..\..\MCC18\h\timers.h" "main.c" "..\Microchip\Include\GenericTypeDefs.h" "..\Microchip\Include\Compiler.h" "..\..\MCC18\h\p18cxxx.h" "..\..\MCC18\h\p18f4520.h" "HardwareProfile.h" "..\..\MCC18\h\stdarg.h" "..\..\MCC18\h\stddef.h" "SystemProfile.h" "MiWiDefs.h" "..\Microchip\Include\MiWi\SymbolTime.h" "..\Microchip\Include\MiWi\MRF24J40.h" "..\..\MCC18\h\pconfig.h"
+	$(CC) -p=18F4520 /i"C:\Pic Cube MiWi\Microchip\MiWi" -I"C:\Pic Cube MiWi\Microchip\Include\Common" -I"C:\Pic Cube MiWi\Microchip\Common" -I"C:\Pic Cube MiWi\Microchip\Include" -I"." "main.c" -fo="Objects - MiWi - End Device - PIC18 - C18\main.o" -D__DEBUG
+
+"clean" : 
+	$(RM) "Objects - MiWi - End Device - PIC18 - C18\Console.o" "Objects - MiWi - End Device - PIC18 - C18\MSPI.o" "Objects - MiWi - End Device - PIC18 - C18\SymbolTime.o" "Objects - MiWi - End Device - PIC18 - C18\MiWi.o" "Objects - MiWi - End Device - PIC18 - C18\ConfigFuses.o" "Objects - MiWi - End Device - PIC18 - C18\main.o" "MiWi - End Device - PIC18 - C18.cof" "MiWi - End Device - PIC18 - C18.hex" "MiWi - End Device - PIC18 - C18.map"
+
