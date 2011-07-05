@@ -54,6 +54,7 @@
 #include ".\MiWi\MRF24J40.h"
 #include ".\MiWi\SymbolTime.h"
 #include <p18f4520.h>
+#include <stdlib.h>
 
 /************************ VARIABLES ********************************/
 #pragma romdata longAddressLocation = 0x0E
@@ -96,19 +97,19 @@ void BoardInit(void);
 void send_nodes_list(void) 
 {
 	BYTE i=0;
-	
+	printf("<INI>\r\n");
 	for(i=0;i<NETWORK_TABLE_SIZE;i++) {
 		if((networkStatus[i].bits.isValid) && (networkTable[i].ShortAddress.Val != 0x0000)) {
 			PrintChar(networkTable[i].ShortAddress.v[1]);
 			PrintChar(networkTable[i].ShortAddress.v[0]);
-			PrintChar(networkTable[i]).info.LongAddress[7];
-			PrintChar(networkTable[i]).info.LongAddress[6];
-			PrintChar(networkTable[i]).info.LongAddress[5];
-			PrintChar(networkTable[i]).info.LongAddress[4];
-			PrintChar(networkTable[i]).info.LongAddress[3];
-			PrintChar(networkTable[i]).info.LongAddress[2];
-			PrintChar(networkTable[i]).info.LongAddress[1];
-			PrintChar(networkTable[i]).info.LongAddress[0];
+		//	PrintChar(networkTable[i].info.LongAddress[7]);
+		//	PrintChar(networkTable[i].info.LongAddress[6]);
+		//	PrintChar(networkTable[i].info.LongAddress[5]);
+		//	PrintChar(networkTable[i].info.LongAddress[4]);
+		//	PrintChar(networkTable[i].info.LongAddress[3]);
+		//	PrintChar(networkTable[i].info.LongAddress[2]);
+		//	PrintChar(networkTable[i].info.LongAddress[1]);
+		//	PrintChar(networkTable[i].info.LongAddress[0]);
 			printf("\r\n");
 			//PrintChar (myShortAddress.v[1]);
 			//PrintChar (myShortAddress.v[0]);
@@ -118,47 +119,65 @@ void send_nodes_list(void)
 }
 
 
-void turn_on(BYTE *node)
+
+void turn_on(BYTE node)
 {
-	TxPayLoad();
-	
-	WriteData(USER_REPORT_TYPE);
-	WriteData(0x87); //TODO: Definir comando
-	SendReportByLongAddress(node);
-	//SendReportByHandle(atoi(node), FALSE);
+        TxPayLoad();
+        
+        WriteData(USER_REPORT_TYPE);
+        WriteData(0x87); //TODO: Definir comando
+        //SendReportByLongAddress(node);
+        SendReportByHandle(node, FALSE);
 }
 
-void turn_off(BYTE *node)
+void turn_off(BYTE node)
 {
-	TxPayLoad();
-	WriteData(USER_REPORT_TYPE);
-	WriteData(0x86); //TODO: Definir comando
-	SendReportByLongAddress(node);
-	//SendReportByHandle(atoi(node), FALSE);
-	
+        TxPayLoad();
+        WriteData(USER_REPORT_TYPE);
+        WriteData(0x86); //TODO: Definir comando
+        //SendReportByLongAddress(node);
+        SendReportByHandle(node, FALSE);
+        
 }
 
-void dimmer_node(BYTE *node, WORD_VAL value)
+void dimmer_node(BYTE node, WORD_VAL value)
 {
-	TxPayLoad();
-	WriteData(USER_REPORT_TYPE);
-	WriteData(0x88); //TODO: Definir comando
-	WriteData(value.v[0]);
-	WriteData(value.v[1]);
-	SendReportByLongAddress(node);
-	//SendReportByHandle(atoi(node), FALSE);
+        TxPayLoad();
+        WriteData(USER_REPORT_TYPE);
+        WriteData(0x88); //TODO: Definir comando
+        WriteData(value.v[0]);
+        WriteData(value.v[1]);
+       // SendReportByLongAddress(node);
+        SendReportByHandle(atoi(node), FALSE);
+}
+
+WORD_VAL get_node(char *ptr) 
+{
+	int i;
+	BYTE aux[2] = {0};
+	WORD_VAL node;
+	
+	for(i = 0; i < 2; i++) {
+		aux[0] = *ptr++;
+		aux[1] = *ptr++;
+	//	node.v[i] = strtol(aux, NULL, 16);
+		//sprintf(node.v[i], "%c%c", aux[0], aux[1]);
+		node.v[i] = atoi(aux);
+		ConsolePut(node.v[i]);
+	}	
+	printf("\r\n");
+	return node;
 }
 
 void get_rs232_cmd() 
 {
-	char buff[16];
+	char buff[16] = {0};
 	char *p = NULL;
 	BYTE node = 0xFF;
 	
-	buff[0] = 0;	
 	p = buff;
 
-	ConsoleGetString(&buff, 10);
+	ConsoleGetString(&buff, 5);
 	
 	switch(*p++) 
 	{
@@ -166,7 +185,7 @@ void get_rs232_cmd()
 		{
 			node = *p++;
 			if (node < 0xFF) {
-				turn_off(node);
+				turn_off(node - 0x30);
 				printf("TURN OFF\r\n");
 			} else
 				printf("NOK\r\n");
@@ -176,7 +195,7 @@ void get_rs232_cmd()
 		{
 			node = *p++;
 			if (node < 0xFF) { 
-				turn_on(node);
+				turn_on(node - 0x30);
 				printf("TURN ON\r\n");
 			} else
 				printf("NOK\r\n");
@@ -191,7 +210,7 @@ void get_rs232_cmd()
 			dimmer.v[0] = *p++;
 			
 			if (node < 0xFF) {
-				dimmer_node(node, dimmer);
+				dimmer_node((node - 0x30), dimmer);
 				printf("DIMMER\r\n");
 			}else
 				printf("NOK\r\n");
@@ -204,7 +223,6 @@ void get_rs232_cmd()
 		}
 	}
 }
-
 
 int pega_cmd() {
 
@@ -236,7 +254,7 @@ int pega_cmd() {
 					ConsolePutROMString((ROM char*)"0x88\r\n");
 					PrintChar(a-0x30);
 					PrintChar(b-0x30);
-					ConsolePutROMString((ROM char*)"\r\n<FIM>\r\n");
+					//ConsolePutROMString((ROM char*)"\r\n<FIM>\r\n");
 					break;	
 				}	
 
@@ -328,7 +346,7 @@ void main(void)
 			LED_3 = 1; //acende led sinalizando que está numa rede
 			if(RxPacket())
 			{
-				ConsolePutROMString((ROM char*)"Chegou novo pacote, tratando...\r\n"); 
+			//	ConsolePutROMString((ROM char*)"Chegou novo pacote, tratando...\r\n"); 
 				pega_cmd();
 			}
 		}
