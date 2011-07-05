@@ -120,60 +120,66 @@ void send_nodes_list(void)
 
 
 
-void turn_on(BYTE node)
+void turn_on(WORD node)
 {
+		WORD_VAL no, panid;
         TxPayLoad();
         
-        WriteData(USER_REPORT_TYPE);
+     	WriteData(USER_REPORT_TYPE);
         WriteData(0x87); //TODO: Definir comando
         //SendReportByLongAddress(node);
-        SendReportByHandle(node, FALSE);
+      //  SendReportByHandle(node, FALSE);
+      	panid.Val = 0x2247;
+      	no.Val = node+0x30;
+     	SendReportByShortAddress(panid, no, FALSE);
 }
 
 void turn_off(BYTE node)
 {
+		WORD_VAL no, panid;
         TxPayLoad();
         WriteData(USER_REPORT_TYPE);
         WriteData(0x86); //TODO: Definir comando
         //SendReportByLongAddress(node);
-        SendReportByHandle(node, FALSE);
+        //SendReportByHandle(node, FALSE);
+        panid.Val = 0x2247;
+      	no.Val = node+0x30;
+     	SendReportByShortAddress(panid, no, FALSE);
+
         
 }
 
 void dimmer_node(BYTE node, WORD_VAL value)
 {
+		WORD_VAL no, panid;
         TxPayLoad();
         WriteData(USER_REPORT_TYPE);
         WriteData(0x88); //TODO: Definir comando
         WriteData(value.v[0]);
         WriteData(value.v[1]);
        // SendReportByLongAddress(node);
-        SendReportByHandle(atoi(node), FALSE);
+       // SendReportByHandle(atoi(node), FALSE);
+ 	    panid.Val = 0x2247;
+      	no.Val = node+0x30;
+     	SendReportByShortAddress(panid, no, FALSE);
 }
 
-WORD_VAL get_node(char *ptr) 
+WORD get_node(char *ptr) 
 {
 	int i;
-	BYTE aux[2] = {0};
-	WORD_VAL node;
+	char aux[4] = {0};
+	WORD node;
 	
-	for(i = 0; i < 2; i++) {
-		aux[0] = *ptr++;
-		aux[1] = *ptr++;
-	//	node.v[i] = strtol(aux, NULL, 16);
-		//sprintf(node.v[i], "%c%c", aux[0], aux[1]);
-		node.v[i] = atoi(aux);
-		ConsolePut(node.v[i]);
-	}	
-	printf("\r\n");
-	return node;
+	for(i = 0; i < 4; i++) 
+		aux[i] = *ptr++;
+
+	return atoi(aux);
 }
 
 void get_rs232_cmd() 
 {
 	char buff[16] = {0};
 	char *p = NULL;
-	BYTE node = 0xFF;
 	
 	p = buff;
 
@@ -183,37 +189,24 @@ void get_rs232_cmd()
 	{
 		case '0':
 		{
-			node = *p++;
-			if (node < 0xFF) {
-				turn_off(node - 0x30);
-				printf("TURN OFF\r\n");
-			} else
-				printf("NOK\r\n");
+			turn_off(get_node(p));
 			break;
 		}
 		case '1':
 		{
-			node = *p++;
-			if (node < 0xFF) { 
-				turn_on(node - 0x30);
-				printf("TURN ON\r\n");
-			} else
-				printf("NOK\r\n");
-			buff[0] = 0;
+			turn_on(get_node(p));
 			break;
 		}
 		case '2':
 		{
+			WORD node;
 			WORD_VAL dimmer;
-			node = *p++;
+			node = get_node(p);
 			dimmer.v[1] = *p++;
 			dimmer.v[0] = *p++;
 			
-			if (node < 0xFF) {
-				dimmer_node((node - 0x30), dimmer);
-				printf("DIMMER\r\n");
-			}else
-				printf("NOK\r\n");
+			dimmer_node(node, dimmer);
+		
 			break;
 		}
 		case '3': 
@@ -228,7 +221,7 @@ int pega_cmd() {
 
 	BYTE *pRxData2;
 	BYTE i;
-	ConsolePutROMString((ROM char*)"DEBUG> RxPacket TRUE ...\r\n");             
+//	ConsolePutROMString((ROM char*)"DEBUG> RxPacket TRUE ...\r\n");             
 	//insert user code here for processing packets as they come in. 
 	//This is a light example
 	pRxData2 = pRxData;
