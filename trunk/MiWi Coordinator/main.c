@@ -134,7 +134,7 @@ void turn_on(WORD node)
      	SendReportByShortAddress(panid, no, FALSE);
 }
 
-void turn_off(BYTE node)
+void turn_off(WORD node)
 {
 		WORD_VAL no, panid;
         TxPayLoad();
@@ -149,7 +149,7 @@ void turn_off(BYTE node)
         
 }
 
-void dimmer_node(BYTE node, WORD_VAL value)
+void dimmer_node(WORD node, WORD_VAL value)
 {
 		WORD_VAL no, panid;
         TxPayLoad();
@@ -183,7 +183,7 @@ void get_rs232_cmd()
 	
 	p = buff;
 
-	ConsoleGetString(&buff, 5);
+	ConsoleGetString(&buff, 7);
 	
 	switch(*p++) 
 	{
@@ -201,9 +201,9 @@ void get_rs232_cmd()
 		{
 			WORD node;
 			WORD_VAL dimmer;
-			node = get_node(p);
 			dimmer.v[1] = *p++;
 			dimmer.v[0] = *p++;
+			node = get_node(p);
 			
 			dimmer_node(node, dimmer);
 		
@@ -215,6 +215,7 @@ void get_rs232_cmd()
 			break;
 		}
 	}
+	buff[0] = 0;
 }
 
 int pega_cmd() {
@@ -235,18 +236,18 @@ int pega_cmd() {
 			switch(*pRxData++)      //report id
 			{
 				case 0x86: 
-					ConsolePutROMString((ROM char*)"0x86\r\n");
+				//	ConsolePutROMString((ROM char*)"0x86\r\n");
 					break;
 				case 0x87: 
-					ConsolePutROMString((ROM char*)"0x87\r\n");
+				//	ConsolePutROMString((ROM char*)"0x87\r\n");
 					break;	
 				case 0x88: {
 					BYTE a, b;
 					a = *pRxData++;
 					b = *pRxData++;
-					ConsolePutROMString((ROM char*)"0x88\r\n");
-					PrintChar(a-0x30);
-					PrintChar(b-0x30);
+				//	ConsolePutROMString((ROM char*)"0x88\r\n");
+				//	PrintChar(a-0x30);
+				//	PrintChar(b-0x30);
 					//ConsolePutROMString((ROM char*)"\r\n<FIM>\r\n");
 					break;	
 				}	
@@ -259,13 +260,13 @@ int pega_cmd() {
 			switch(*pRxData)
 			{
 				case ACK_REPORT_TYPE:
-					ConsolePutROMString((ROM char*)"Got MiWi ACK for my packet\r\n");
+			//		ConsolePutROMString((ROM char*)"Got MiWi ACK for my packet\r\n");
 					break;
 			}
 			break;
 
 		default:
-			ConsolePutROMString((ROM char*)"DEBUG> RxPacket Desconhecido TYPE... \r\n");	
+		//	ConsolePutROMString((ROM char*)"DEBUG> RxPacket Desconhecido TYPE... \r\n");	
 			break;
 
 	} // fecha switch...
@@ -320,7 +321,7 @@ void main(void)
 
 	MiWiInit();
 
-	ConsolePutROMString((ROM char*)"Sistema Inicializado Ok...\r\n"); 
+//	ConsolePutROMString((ROM char*)"Sistema Inicializado Ok...\r\n"); 
 
 	INTCONbits.GIEH = 1;
 
@@ -328,7 +329,7 @@ void main(void)
 	{
 		LED_3 = 1;
 		MiWiTasks();
-		LED_3 = 0;
+		
 		
 		if(PIR1bits.RCIF) 			
 			get_rs232_cmd();
@@ -350,14 +351,14 @@ void main(void)
 			//If I don't have a network yet and I am not currently trying to join a network
 			if((!SearchingForNetworks()) && (!AttemptingToJoinNetwork()) && (!AttemptingToRejoinNetwork()))
 			{
-				ConsolePutROMString((ROM char*)"Criando nova rede...\r\n"); 
+		//		ConsolePutROMString((ROM char*)"Criando nova rede...\r\n"); 
 				//form a network with the specified PANID
 				FormNetwork(0x2247); // era 0xFFFF pra RANDOM
 				//clear all of the network entries
 				ClearNetworkTable(CLEAR_NETWORKS);
-
 			}
 		}
+		LED_3 = 0;
 	}
 }
 

@@ -173,7 +173,7 @@ void trata_int_e_timer()
     {
 	    INTCON3bits.INT1IF = 0;
 	    
-	  // carga_dispositivo = 37000;
+	   //carga_dispositivo = 37000;
 	    if (carga_dispositivo > 0) 
 	    {
 		    if (T1CONbits.TMR1ON == 0) {
